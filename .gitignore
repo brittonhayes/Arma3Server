@@ -1,1 +1,4 @@
 .env
+configs/_default.config
+configs/secrets-*
+configs/common.cfg
