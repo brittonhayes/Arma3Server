@@ -1,46 +1,17 @@
-FROM debian:bullseye-slim
+FROM ghcr.io/brittonhayes/armactl:latest as armactl
 
-LABEL maintainer="Brett - github.com/brettmayson"
-LABEL org.opencontainers.image.source=https://github.com/brettmayson/arma3server
+FROM gameservermanagers/gameserver:arma3
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN apt-get update \
-    && \
-    apt-get install -y --no-install-recommends --no-install-suggests \
-        python3 \
-        lib32stdc++6 \
-        lib32gcc-s1 \
-        libcurl4 \
-        wget \
-        ca-certificates \
-    && \
-    apt-get remove --purge -y \
-    && \
-    apt-get clean autoclean \
-    && \
-    apt-get autoremove -y \
-    && \
-    rm -rf /var/lib/apt/lists/* \
-    && \
-    mkdir -p /steamcmd \
-    && \
-    wget -qO- 'https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz' | tar zxf - -C /steamcmd
+LABEL maintainer="Britton - github.com/brittonhayes"
+LABEL org.opencontainers.image.source=https://github.com/brittonhayes/arma3server
 
-ENV ARMA_BINARY=./arma3server
-ENV ARMA_CONFIG=main.cfg
-ENV ARMA_PARAMS=
-ENV ARMA_PROFILE=main
-ENV ARMA_WORLD=empty
-ENV ARMA_LIMITFPS=1000
-ENV ARMA_CDLC=
-ENV HEADLESS_CLIENTS=0
-ENV HEADLESS_CLIENTS_PROFILE="\$profile-hc-\$i"
-ENV PORT=2302
-ENV STEAM_BRANCH=public
-ENV STEAM_BRANCH_PASSWORD=
-ENV MODS_LOCAL=true
-ENV MODS_PRESET=
-ENV SKIP_INSTALL=false
+COPY --from=armactl /bin/armactl /usr/bin/armactl
+
+# Linux GSM
+ENV GAMESERVER=arma3server
+ENV LGSM_GITHUBUSER=GameServerManagers
+ENV LGSM_GITHUBREPO=LinuxGSM
+ENV LGSM_GITHUBBRANCH=master
 
 EXPOSE 2302/udp
 EXPOSE 2303/udp
@@ -48,12 +19,9 @@ EXPOSE 2304/udp
 EXPOSE 2305/udp
 EXPOSE 2306/udp
 
-WORKDIR /arma3
+# Insecure workaround for failing symlink during install
+RUN sudo chown -R linuxgsm:linuxgsm /root
 
-VOLUME /steamcmd
+ENTRYPOINT [ "/init" ]
 
-STOPSIGNAL SIGINT
-
-COPY *.py /
-
-CMD ["python3","/launch.py"]
+CMD ["./entrypoint.sh"]

@@ -1,15 +1,22 @@
 version: '3.8'
+
 services:
   arma3:
     build: .
-    image: synixebrett/arma3server
+    image: ghcr.io/brittonhayes/arma3server
     platform: linux/amd64
-    container_name: arma3
-    network_mode: host
+    container_name: arma
+    ports:
+      - 2302:2302
+      - 2303:2303
+      - 2304:2304
+      - 2305:2305
+      - 2306:2306
     volumes:
-      - './missions:/arma3/mpmissions'
-      - './configs:/arma3/configs'
-      - './mods:/arma3/mods'
-      - './servermods:/arma3/servermods'
-    env_file: .env
+      - arma-serverfiles:/linuxgsm/serverfiles/
+      - './mods:/linuxgsm/serverfiles/mods'
+      - './configs:/linuxgsm/lgsm/config-lgsm/arma3server'
     restart: unless-stopped
+
+volumes:
+  arma-serverfiles:
