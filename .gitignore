@@ -1,4 +1,5 @@
 .env
+configs/_default.config
 configs/arma3server.cfg
 configs/secrets-*
 configs/common.cfg
