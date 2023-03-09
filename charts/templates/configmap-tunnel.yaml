@@ -1,5 +1,3 @@
-# TODO: Can this go into one "cluster" config?
-# TODO: Can this go into one "listener" config?
 {{- if .Values.headlessclient.enabled }}
 apiVersion: v1
 kind: ConfigMap

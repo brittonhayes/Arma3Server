@@ -47,25 +47,25 @@ A Helm chart for ARMA 3 on LinuxGSM.
 | nodeSelector | object | `{}` |  |
 | persistence.data.accessMode | string | `"ReadWriteOnce"` |  |
 | persistence.data.annotations | object | `{}` |  |
-| persistence.data.enabled | bool | `false` |  |
+| persistence.data.enabled | bool | `true` |  |
 | persistence.data.size | string | `"40Gi"` |  |
-| persistence.data.storageClass | string | `"-"` |  |
+| persistence.data.storageClass | string | `"hostpath"` |  |
 | persistence.headlessclient.accessMode | string | `"ReadWriteMany"` | Volume access mode, if you want to use more than one headless client, this must be ReadWriteMany |
 | persistence.headlessclient.annotations | object | `{}` |  |
-| persistence.headlessclient.enabled | bool | `true` | enable persistence for ARMA3 Headless Client data (all game assets except the config/profiles/main) |
+| persistence.headlessclient.enabled | bool | `false` | enable persistence for ARMA3 Headless Client data (all game assets except the config/profiles/main) |
 | persistence.headlessclient.sharedFilesystem | bool | `true` | use the same filesystem for both the server and the headless clients |
 | persistence.headlessclient.size | string | `"40Gi"` |  |
-| persistence.headlessclient.storageClass | string | `"-"` |  |
+| persistence.headlessclient.storageClass | string | `"hostpath"` |  |
 | persistence.profile.accessMode | string | `"ReadWriteOnce"` |  |
 | persistence.profile.annotations | object | `{}` |  |
 | persistence.profile.enabled | bool | `true` | WARNING: if you set this to false, your progress in Antistasi will be lost on a server restart |
 | persistence.profile.size | string | `"2Gi"` |  |
-| persistence.profile.storageClass | string | `"-"` |  |
+| persistence.profile.storageClass | string | `"hostpath"` |  |
 | podAnnotations | object | `{}` |  |
 | podSecurityContext.fsGroup | int | `433` |  |
 | replicas | int | `1` | Only one replica is supported at this time |
 | resources | object | `{}` |  |
-| rsync.enabled | bool | `true` | Use rsync to synchronize the game data from the server to the headless clients on startup |
+| rsync.enabled | bool | `false` | Use rsync to synchronize the game data from the server to the headless clients on startup |
 | rsync.image.pullPolicy | string | `"IfNotPresent"` |  |
 | rsync.image.repository | string | `"fbuchmeier/rsync-server"` |  |
 | rsync.image.tag | string | `"2.0.1"` | Overrides the image tag whose default is the chart appVersion. |

@@ -22,11 +22,15 @@ docker-compose up -d
 
 ## Helm Chart
 
-To use with helm, run the following command:
+To use with helm, run the following command after setting the environment variables:
 
 ```bash
 # Install the helm chart
-helm install --name arma3server ./charts
+helm -n arma3 install arma3 ./charts \
+    --set credentials.serverPassword=$SERVER_PASSWORD \
+    --set credentials.adminPassword=$ADMIN_PASSWORD \
+    --set credentials.steamUser=$STEAM_USER \
+    --set credentials.steamPassword=$STEAM_PASSWORD
 ```
 
 ## Mods

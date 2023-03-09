@@ -3,9 +3,9 @@ replicas: 1
 
 image:
   pullPolicy: IfNotPresent
-  repository: ghcr.io/brittonhayes/arma3
+  repository: ghcr.io/brittonhayes/arma3server
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -40,14 +40,14 @@ podAnnotations: {}
 podSecurityContext:
   fsGroup: 433
 
-securityContext:
-  capabilities:
-    drop:
-    - ALL
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 431
-  runAsGroup: 433
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: false
+  # runAsNonRoot: false
+  # runAsUser: 431
+  # runAsGroup: 433
 
 service:
   type: ClusterIP
@@ -85,7 +85,7 @@ config:
 persistence:
   data:
     # ARMA3 Data (all game assets except the config/profiles/main)
-    enabled: false
+    enabled: true
     annotations: {}
     ## arma3 data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
@@ -94,7 +94,7 @@ persistence:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass: "-"
+    storageClass: "hostpath"
 
     ## A manually managed Persistent Volume and Claim
     ## Requires persistence.enabled: true
@@ -116,7 +116,7 @@ persistence:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass: "-"
+    storageClass: "hostpath"
 
     ## A manually managed Persistent Volume and Claim
     ## Requires persistence.enabled: true
@@ -128,7 +128,7 @@ persistence:
 
   headlessclient:
     # -- enable persistence for ARMA3 Headless Client data (all game assets except the config/profiles/main)
-    enabled: true
+    enabled: false
     # -- use the same filesystem for both the server and the headless clients
     sharedFilesystem: true
     annotations: {}
@@ -139,7 +139,7 @@ persistence:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass: "-"
+    storageClass: "hostpath"
 
     ## A manually managed Persistent Volume and Claim
     ## Requires persistence.enabled: true
@@ -159,7 +159,7 @@ credentials:
 
   useExistingSecret:
     # -- Use a dedicated, already existing secret for credentials, any key already specified under 'credentials.' directly will be ignored
-    enabled: true
+    enabled: false
     # -- The credential is looked up from a secret, which resides in this namespace
     # if empty, use Release.Namespace
     namespace: ""
@@ -228,7 +228,7 @@ tunnel:
 
 rsync:
   # -- Use rsync to synchronize the game data from the server to the headless clients on startup
-  enabled: true
+  enabled: false
   image:
     repository: fbuchmeier/rsync-server
     pullPolicy: IfNotPresent

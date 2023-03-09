@@ -2,14 +2,36 @@
 
 version: '3'
 
+dotenv: ['.env']
+
 tasks:
   default:
     cmds:
     - task: helm
     silent: true
 
+  build:
+    desc: Build docker image
+    cmds:
+    - docker build -t ghcr.io/brittonhayes/arma3server .
+
   helm:
     desc: Execute helm template and documentation generation
     cmds:
     - helm template arma3 ./charts | kubeconform -summary
     - helm-docs -c ./charts
+
+  install:
+    desc: Install helm chart to cluster
+    cmds:
+    - |
+      helm -n arma3 install arma3 ./charts \
+        --set credentials.serverPassword=$SERVER_PASSWORD \
+        --set credentials.adminPassword=$ADMIN_PASSWORD \
+        --set credentials.steamUser=$STEAM_USER \
+        --set credentials.steamPassword=$STEAM_PASSWORD
+
+  uninstall:
+    desc: Uninstall helm chart from cluster
+    cmds:
+    - helm -n arma3 uninstall arma3

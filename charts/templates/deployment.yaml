@@ -65,7 +65,7 @@ spec:
             {{- toYaml .Values.rsync.resources | nindent 12 }}
           volumeMounts:
             - name: data
-              mountPath: /arma3
+              mountPath: /linuxgsm/serverfiles
               readOnly: true
             - name: tmp
               mountPath: /tmp
@@ -120,30 +120,27 @@ spec:
             - name: metrics
               containerPort: 8000
               protocol: TCP
-          readinessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - cat /tmp/arma3_launch_success
-            initialDelaySeconds: 60
-            periodSeconds: 20
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: config
-              mountPath: /arma3/configs/main.cfg
-              subPath: main.cfg
+              mountPath: /linuxgsm/lgsm/config-lgsm/arma3server/arma3server.server.cfg
+              subPath: arma3server.server.cfg
+              readOnly: true
+            - name: commonconfig
+              mountPath: /linuxgsm/lgsm/config-lgsm/arma3server/common.cfg
+              subPath: common.cfg
+              readOnly: true
+            - name: networkconfig
+              mountPath: /linuxgsm/lgsm/config-lgsm/arma3server/arma3server.network.cfg
+              subPath: arma3server.network.cfg
               readOnly: true
             - name: data
-              mountPath: /arma3
+              mountPath: /linuxgsm/serverfiles
               readOnly: false
             - name: profile
-              mountPath: /arma3/configs/profiles/home/main
+              mountPath: /linuxgsm/serverfiles/profiles
               readOnly: false
-            - name: modpresets
-              mountPath: /modpresets
-              readOnly: true
             - name: tmp
               mountPath: /tmp
               readOnly: false
@@ -157,6 +154,12 @@ spec:
         - name: config
           configMap:
             name: {{ include "arma3.fullname" . }}
+        - name: networkconfig
+          configMap:
+            name: {{ include "arma3.fullname" . }}-network
+        - name: commonconfig
+          configMap:
+            name: {{ include "arma3.fullname" . }}-common
         - name: data
           {{- if .Values.persistence.data.enabled }}
           persistentVolumeClaim:
@@ -174,9 +177,6 @@ spec:
         - name: modpresets
           configMap:
             name: {{ include "arma3.fullname" . }}-modpresets
-        - name: scripts
-          configMap:
-            name: {{ include "arma3.fullname" . }}-scripts
         - name: tmp
           emptyDir:
             medium: Memory
