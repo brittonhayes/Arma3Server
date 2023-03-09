@@ -75,7 +75,7 @@ data:
     serverLongitude=0;
     serverLongitudeAuto=0;
     // MISC
-    // View Distance (not sure if this actually works)
+    // View Distance
     viewDistance=10000;
 
     // Maximum size (in b) for custom face or sound files
