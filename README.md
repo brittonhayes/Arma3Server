@@ -11,17 +11,23 @@ Settings can be changed in:
 - `configs/arma3server.server.cfg`
 - `configs/arma3server.network.cfg`
 
-### docker-compose
+## Docker Compose
 
-Use `docker-compose start` to start the server.
+To use with docker-compose, run the following command:
 
-Use `docker-compose logs` to see server logs.
+```bash
+# Start the server detached
+docker-compose up -d
+```
 
-Use `docker-compose down` to shutdown the server.
+## Helm Chart
 
-Use `docker-compose up -d` to start the server, detached.
+To use with helm, run the following command:
 
-See [Docker-compose](https://docs.docker.com/compose/install/#install-compose) for an installation guide.
+```bash
+# Install the helm chart
+helm install --name arma3server ./charts
+```
 
 ## Mods
 
@@ -29,3 +35,8 @@ See [Docker-compose](https://docs.docker.com/compose/install/#install-compose) f
 
 1. Place the mods inside `/mods`
 2. Start the server.
+
+# Acknowledgements
+
+- Helm chart design heavily based on the work by [fbuchmeier](https://github.com/fbuchmeier)
+- Server administration using [linuxgsm](https://linuxgsm.com)

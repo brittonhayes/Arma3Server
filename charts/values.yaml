@@ -1,0 +1,256 @@
+# -- Only one replica is supported at this time
+replicas: 1
+
+image:
+  pullPolicy: IfNotPresent
+  repository: ghcr.io/brittonhayes/arma3
+  # -- Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- Annotations to add to the service account
+  annotations: {}
+  # -- The name of the service account to use.
+  # -- If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+serviceMonitor:
+  # --- If true, a ServiceMonitor CRD is created for a prometheus operator
+  enabled: false
+  path: /metrics
+  #  namespace: (defaults to use the namespace this chart is deployed to)
+  labels: {}
+  interval: 5s
+  scheme: http
+  scrapeTimeout: 2s
+  relabelings: []
+
+deploymentAnnotations:
+  # -- To automatically reload the container on configuration changes, use
+  reloader.stakater.com/auto: "true"
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 433
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 431
+  runAsGroup: 433
+
+service:
+  type: ClusterIP
+  port: 80
+  annotations: {}
+
+resources: {}
+
+config:
+  # -- External Hostname of server
+  hostname: arma3.example.com
+  # -- Set the headlessClients and localClient, set to 127.0.0.1 when .Values.headlessclient.enabled
+  headlessClients: []
+  #    - "127.0.0.1"
+  #    - "192.168.178.20"
+  #    - "192.168.178.35"
+  #    - "192.168.178.34"
+  # -- 1=enabled, 0=disabled
+  battleeye: 1
+
+  # -- Set the maximum number of player clients able to connect to the server
+  maxPlayers: 20
+
+  # -- Environment parameters for the game container
+  env:
+    # -- Select the steam branch, e.g. 'creatordlc'
+    STEAM_BRANCH: ""
+    # -- Specify a creators DLC, e.g. 'vn'
+    ARMA_CDLC: ""
+    # -- Use a preset from /modpresets/<presetname>
+    MODS_PRESET: ""
+    # -- Specify the FPS limit for the server
+    ARMA_LIMITFPS: "60"
+
+persistence:
+  data:
+    # ARMA3 Data (all game assets except the config/profiles/main)
+    enabled: false
+    annotations: {}
+    ## arma3 data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+
+    ## A manually managed Persistent Volume and Claim
+    ## Requires persistence.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    # existingClaim:
+
+    accessMode: ReadWriteOnce
+    size: 40Gi
+
+  profile:
+    # ARMA3 Profiles (this is where AntiStasi saves it's progress)
+    # -- WARNING: if you set this to false, your progress in Antistasi will be lost on a server restart
+    enabled: true
+    annotations: {}
+    ## arma3 data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: "-"
+
+    ## A manually managed Persistent Volume and Claim
+    ## Requires persistence.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    # existingClaim:
+
+    accessMode: ReadWriteOnce
+    size: 2Gi
+
+  headlessclient:
+    # -- enable persistence for ARMA3 Headless Client data (all game assets except the config/profiles/main)
+    enabled: true
+    # -- use the same filesystem for both the server and the headless clients
+    sharedFilesystem: true
+    annotations: {}
+    ## arma3 data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: "-"
+
+    ## A manually managed Persistent Volume and Claim
+    ## Requires persistence.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    # existingClaim:
+
+    # -- Volume access mode, if you want to use more than one headless client, this must be ReadWriteMany
+    accessMode: ReadWriteMany
+    size: 40Gi
+
+# -- Specify credentials for the server
+credentials:
+  serverPassword: ""
+  adminPassword: ""
+  steamUser: ""
+  steamPassword: ""
+
+  useExistingSecret:
+    # -- Use a dedicated, already existing secret for credentials, any key already specified under 'credentials.' directly will be ignored
+    enabled: true
+    # -- The credential is looked up from a secret, which resides in this namespace
+    # if empty, use Release.Namespace
+    namespace: ""
+    # -- The credential is looked up from a secret with this name
+    name: ""
+    # -- The Server Password
+    serverPasswordKey: server-password
+    # -- The Server ADMIN Password
+    adminPasswordKey: admin-password
+    # -- The Steam User to Login to the Steam API
+    steamUserKey: steam-user
+    # -- The Steam API to Login to the Steam API
+    steamPasswordKey: steam-password
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# -- Headless clients only work when persistence.data.accessMode is set to 'ReadWriteMany'
+headlessclient:
+  enabled: true
+  name: hc
+  # -- Launch the given number of headless clients in separate pods
+  replicas: null
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  # -- We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user.
+  resources: {}
+  # limits:
+  #   cpu: 2
+  #   memory: 4Gi
+  # requests:
+  #   cpu: 1
+  #   memory: 2Gi
+  # -- We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user.
+  initResources: {}
+  # limits:
+  #   memory: 512Mi
+  #   cpu: 4
+  # requests:
+  #   memory: 256Mi
+  #   cpu: 1
+  antiAffinity:
+    # -- Enable podAntiAffinity so that server and headless clients get scheduled on different nodes if possible
+    enabled: true
+
+# -- Use envoy to tunnel requests from headless clients and whitelist only 127.0.0.1, automatically enabled with .Values.headlessclient.enabled
+tunnel:
+  image:
+    repository: envoyproxy/envoy
+    pullPolicy: IfNotPresent
+    # -- Overrides the image tag whose default is the chart appVersion.
+    tag: v1.24-latest
+  # -- We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user.
+  resources: {}
+  # limits:
+#   cpu: 250m
+#   memory: 256Mi
+# requests:
+#   cpu: 50m
+#   memory: 128Mi
+
+rsync:
+  # -- Use rsync to synchronize the game data from the server to the headless clients on startup
+  enabled: true
+  image:
+    repository: fbuchmeier/rsync-server
+    pullPolicy: IfNotPresent
+    # -- Overrides the image tag whose default is the chart appVersion.
+    tag: 2.0.1
+  resources: {}
+  # limits:
+  #   cpu: 250m
+  #   memory: 256Mi
+  # requests:
+  #   cpu: 50m
+  #   memory: 128Mi
+
+  # rsync: [Receiver] chroot /arma3 failed: Operation not permitted (1)
+  securityContext:
+    #      drop:
+    #        - ALL
+    #      add:
+    #        - SYS_CHROOT
+    readOnlyRootFilesystem: true
+    #    capabilities:
+    runAsNonRoot: false
+    runAsUser: 0
+    runAsGroup: 0
+

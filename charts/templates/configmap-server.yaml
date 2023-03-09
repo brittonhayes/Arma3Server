@@ -1,0 +1,220 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "arma3.fullname" . }}
+  labels:
+    {{- include "arma3.labels" . | nindent 4 }}
+  {{- with .Values.deploymentAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  arma3server.network.cfg: |-
+    // ****************************************************************************
+    //     Arma 3 - network.cfg                                                   *
+    // ****************************************************************************
+
+    // Defines network tuning parameters
+    //
+    // This file is to be passed to the -cfg parameter on the command line for the server
+    // See http://community.bistudio.com/wiki/basic.cfg
+    // The following settings are the suggested settings
+
+    // BANDWIDTH SETTINGS
+
+    // Bandwidth the server is guaranteed to have (in bps)
+    // General guideline is NumberOfPlayers * 256kb
+    // Default: 131072
+    MinBandwidth=5120000;
+    // Bandwidth the server can never go above (in bps)
+    // For a single server, use full network speed; decrease when running multiple servers
+    MaxBandwidth=10240000;
+
+    // PACKET SETTINGS
+
+    // Maximum number of packets per frame.
+    // Increasing the value potentially decreases lag, but increases desync
+    // Default: 128
+    MaxMsgSend=2048;
+    // Maximum payload of guaranteed packet (in b)
+    // Small messages are packed to larger packets
+    // Guaranteed packets are used for non-repetitive events, like shooting
+    // Lower value means more packets are sent, so less events will get combined
+    // Default: 512
+    MaxSizeGuaranteed=512;
+    // Maximum payload of non-guaranteed packet (in b)
+    // Increasing this value may improve bandwidth requirement, but may also increase lag
+    // Largest factor in desync
+    // Guidance is half of MaxSizeGuaranteed
+    // Default: 256
+    MaxSizeNonguaranteed=256;
+    // Maximal size of a packet sent over the network
+    // Only necessary if ISP forces lower packet size and there are connectivity issues
+    // Default: 1400
+    // class sockets{maxPacketSize=1400};
+
+    // SMOOTHNESS SETTINGS
+
+    // Minimal error required to send network updates for far units
+    // Smaller values will make for smoother movement at long ranges, but will increase network traffic
+    // Default: 0.003
+    MinErrorToSend=0.01;
+    // Minimal error required to send network updates for near units
+    // Using larger value can reduce traffic sent for near units
+    // Also controls client to server traffic
+    // Default: 0.01
+    MinErrorToSendNear=0.02;
+
+    // GEOLOCATION SETTINGS
+
+    // Server latitude
+    serverLatitude=52;
+    serverLatitudeAuto=52;
+
+    // Server Longitude
+    serverLongitude=0;
+    serverLongitudeAuto=0;
+    // MISC
+    // View Distance (not sure if this actually works)
+    viewDistance=10000;
+
+    // Maximum size (in b) for custom face or sound files
+    // Default: 0
+    MaxCustomFileSize=0;
+    // Server language
+    language="English";
+    steamLanguage="English";
+    // Adapter
+    adapter=-1;
+    // Windowed mode
+    Windowed=0;
+
+    3D_Performance=1.000000;
+  arma3server.server.cfg: |-
+    // ****************************************************************************
+    //     Arma 3 - server.cfg                                                    *
+    // ****************************************************************************
+
+    // ArmA 3 Server Config File
+    //
+    // More info about parameters:
+    // https://community.bistudio.com/wiki/server.cfg
+
+
+    // GENERAL SETTINGS
+
+    // Hostname for server.
+    hostname = "{{ .Values.config.hostname }}";
+
+    // Server password - for private servers.
+    {{- if (include "serverPassword" .) }}
+    // Password required to join the server (remove // at start of line to enable)
+    password = "{{ include "serverPassword" . }}";
+    {{- end }}
+
+    // Password to login as admin. Open the chat and type: #login password
+    passwordAdmin = "{{ include "adminPassword" . }}";
+
+    // Auto-admin
+    admins[] = {""};
+
+    // Server Slots
+    maxPlayers = {{ .Values.config.maxPlayers | default 20 }};
+
+    // Minimum Required Client Build
+    //requiredBuild = 95691
+
+    // Message of the Day (MOTD)
+    motd[] = {
+        "Welcome to {{ .Values.config.hostname | default "Arma 3 - Hosted on Kubernetes" }}",
+    };
+
+    // MOTD Interval (Seconds)
+    motdInterval = 30;
+
+
+    // VOTING
+
+    // Server Mission Start
+    //  minimum number of clients before server starts mission
+    voteMissionPlayers = 1;
+
+    // Accepted Vote Threshold
+    //  0.33 = 33% clients.
+    voteThreshold = 0.33;
+
+    // INGAME SETTINGS
+
+    // Disable Voice over Net (VoN)
+    //  0 = voice enabled.
+    //  1 = voice disabled.
+    disableVoN = 1;
+
+    // VoN Codec Quality
+    //  0-10 = 8kHz (narrowband).
+    //  11-20 = 16kHz (wideband).
+    //  21-30 = 32kHz (ultrawideband).
+    vonCodecQuality = 0;
+
+    // Persistent Battlefield
+    //  0 = disable.
+    //  1 = enable.
+    persistent = 1;
+
+    // Time Stamp Format
+    //  none, short, full
+    timeStampFormat = "short";
+
+    // Server Statistics
+    //  Set this to 0 to opt-out! More info: https://community.bistudio.com/wiki/Arma_3_Analytics
+    statisticsEnabled = 1;
+
+    // SERVER SECURITY/ANTI HACK
+
+    // Verify Signitures for Client Addons
+    //  0 = off.
+    //  1 = weak protection (deprecated).
+    //  2 = full protection.
+    verifySignatures = 2;
+
+    // Secure Player ID
+    //  1 = Server warning message.
+    //  2 = Kick client.
+    requiredSecureId = 2;
+
+    // Kick Duplicate Player IDs
+    kickDuplicate = 1;
+
+    // BattlEye Anti-Cheat
+    //  0 = disable
+    //  1 = enable
+    BattlEye = {{ .Values.config.battleeye }}; // If set to 1, BattlEye Anti-Cheat will be enabled on the server (default: 1, recommended: 1)
+    battleyeLicense = 1;
+
+    // Allowed File Extentions
+    allowedLoadFileExtensions[] = {"hpp","sqs","sqf","fsm","cpp","paa","txt","xml","inc","ext","sqm","ods","fxy","lip","csv","kb","bik","bikb","html","htm","biedi"};
+    allowedPreprocessFileExtensions[] = {"hpp","sqs","sqf","fsm","cpp","paa","txt","xml","inc","ext","sqm","ods","fxy","lip","csv","kb","bik","bikb","html","htm","biedi"};
+    allowedHTMLLoadExtensions[] = {"htm","html","xml","txt"};
+
+    // SCRIPTING EVENTS
+    onUserConnected = "";
+    onUserDisconnected = "";
+    doubleIdDetected = "";
+
+    // SIGNATURE VERIFICATION
+    // kick = kick (_this select 0)
+    // ban = ban (_this select 0)
+    onUnsignedData = "kick (_this select 0)";
+    onHackedData = "kick (_this select 0)";
+    onDifferentData = "";
+
+    // HEADLESS CLIENT SUPPORT
+    // specify ip-adresses of allowed headless clients
+    // if more than one:
+    // headlessClients[] = {"127.0.0.1", "192.168.0.1"};
+    // localClient[] = {"127.0.0.1", "192.168.0.1"};
+    {{- if .Values.config.headlessClients }}
+    headlessClients[]={ {{ join "," .Values.config.headlessClients }} };
+    localClient[]={ {{join "," .Values.config.headlessClients}} };
+    {{- end }}
+---
