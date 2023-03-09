@@ -1,6 +1,6 @@
 # arma3
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart for ARMA 3 on LinuxGSM.
 
@@ -15,6 +15,7 @@ A Helm chart for ARMA 3 on LinuxGSM.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` |  |
+| config.admins | list | `[]` | List of administrators |
 | config.battleeye | int | `1` | 1=enabled, 0=disabled |
 | config.env | object | `{"ARMA_CDLC":"","ARMA_LIMITFPS":"60","MODS_PRESET":"","STEAM_BRANCH":""}` | Environment parameters for the game container |
 | config.env.ARMA_CDLC | string | `""` | Specify a creators DLC, e.g. 'vn' |
@@ -24,9 +25,9 @@ A Helm chart for ARMA 3 on LinuxGSM.
 | config.headlessClients | list | `[]` | Set the headlessClients and localClient, set to 127.0.0.1 when .Values.headlessclient.enabled |
 | config.hostname | string | `"arma3.example.com"` | External Hostname of server |
 | config.maxPlayers | int | `20` | Set the maximum number of player clients able to connect to the server |
-| credentials | object | `{"adminPassword":"","serverPassword":"","steamPassword":"","steamUser":"","useExistingSecret":{"adminPasswordKey":"admin-password","enabled":true,"name":"","namespace":"","serverPasswordKey":"server-password","steamPasswordKey":"steam-password","steamUserKey":"steam-user"}}` | Specify credentials for the server |
+| credentials | object | `{"adminPassword":"","serverPassword":"","steamPassword":"","steamUser":"","useExistingSecret":{"adminPasswordKey":"admin-password","enabled":false,"name":"","namespace":"","serverPasswordKey":"server-password","steamPasswordKey":"steam-password","steamUserKey":"steam-user"}}` | Specify credentials for the server |
 | credentials.useExistingSecret.adminPasswordKey | string | `"admin-password"` | The Server ADMIN Password |
-| credentials.useExistingSecret.enabled | bool | `true` | Use a dedicated, already existing secret for credentials, any key already specified under 'credentials.' directly will be ignored |
+| credentials.useExistingSecret.enabled | bool | `false` | Use a dedicated, already existing secret for credentials, any key already specified under 'credentials.' directly will be ignored |
 | credentials.useExistingSecret.name | string | `""` | The credential is looked up from a secret with this name |
 | credentials.useExistingSecret.namespace | string | `""` | The credential is looked up from a secret, which resides in this namespace if empty, use Release.Namespace |
 | credentials.useExistingSecret.serverPasswordKey | string | `"server-password"` | The Server Password |
@@ -40,8 +41,8 @@ A Helm chart for ARMA 3 on LinuxGSM.
 | headlessclient.replicas | string | `nil` | Launch the given number of headless clients in separate pods |
 | headlessclient.resources | object | `{}` | We usually recommend not to specify default resources and to leave this as a conscious choice for the user. |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.repository | string | `"ghcr.io/brittonhayes/arma3"` |  |
-| image.tag | string | `""` | Overrides the image tag whose default is the chart appVersion. |
+| image.repository | string | `"ghcr.io/brittonhayes/arma3server"` |  |
+| image.tag | string | `"latest"` | Overrides the image tag whose default is the chart appVersion. |
 | imagePullSecrets | list | `[]` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
@@ -74,11 +75,7 @@ A Helm chart for ARMA 3 on LinuxGSM.
 | rsync.securityContext.runAsGroup | int | `0` |  |
 | rsync.securityContext.runAsNonRoot | bool | `false` |  |
 | rsync.securityContext.runAsUser | int | `0` |  |
-| securityContext.capabilities.drop[0] | string | `"ALL"` |  |
-| securityContext.readOnlyRootFilesystem | bool | `true` |  |
-| securityContext.runAsGroup | int | `433` |  |
-| securityContext.runAsNonRoot | bool | `true` |  |
-| securityContext.runAsUser | int | `431` |  |
+| securityContext | object | `{}` |  |
 | service.annotations | object | `{}` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |

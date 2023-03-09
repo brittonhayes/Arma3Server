@@ -4,6 +4,9 @@ version: '3'
 
 dotenv: ['.env']
 
+vars:
+  ChartPath: ./charts/arma3
+
 tasks:
   default:
     cmds:
@@ -18,14 +21,14 @@ tasks:
   helm:
     desc: Execute helm template and documentation generation
     cmds:
-    - helm template arma3 ./charts | kubeconform -summary
-    - helm-docs -c ./charts
+    - helm template arma3 {{ .ChartPath }} | kubeconform -summary
+    - helm-docs -c {{ .ChartPath }}
 
   install:
     desc: Install helm chart to cluster
     cmds:
     - |
-      helm -n arma3 install arma3 ./charts \
+      helm -n arma3 install arma3 {{ .ChartPath }} \
         --set credentials.serverPassword=$SERVER_PASSWORD \
         --set credentials.adminPassword=$ADMIN_PASSWORD \
         --set credentials.steamUser=$STEAM_USER \

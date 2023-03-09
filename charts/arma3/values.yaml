@@ -68,6 +68,9 @@ config:
   # -- 1=enabled, 0=disabled
   battleeye: 1
 
+  # -- List of administrators
+  admins: []
+
   # -- Set the maximum number of player clients able to connect to the server
   maxPlayers: 20
 
