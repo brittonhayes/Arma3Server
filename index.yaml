@@ -1,0 +1,21 @@
+apiVersion: v1
+entries:
+  arma3:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-03-09T23:52:53.307430965Z"
+    description: A Helm chart for ARMA 3 on LinuxGSM.
+    digest: 045347cd414ee3e7ae1cb905ad6e5d90e7c181d1f01c59ea963576d8fe2409f0
+    keywords:
+    - arma3
+    - GameServers
+    - linuxgsm
+    maintainers:
+    - name: Britton Hayes
+      url: https://github.com/brittonhayes
+    name: arma3
+    type: application
+    urls:
+    - https://github.com/brittonhayes/Arma3Server/releases/download/arma3-0.1.4/arma3-0.1.4.tgz
+    version: 0.1.4
+generated: "2023-03-09T23:52:53.307436765Z"
