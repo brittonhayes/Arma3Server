@@ -4,6 +4,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "arma3.fullname" . }}-headlessclient
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "arma3.labels" . | nindent 4 }}
 spec:

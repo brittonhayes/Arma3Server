@@ -4,6 +4,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "arma3.fullname" . }}-data
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "arma3.labels" . | nindent 4 }}
 spec:
@@ -26,6 +27,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "arma3.fullname" . }}-profile
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "arma3.labels" . | nindent 4 }}
 spec:

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "arma3.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "arma3.labels" . | nindent 4 }}
   {{- with .Values.deploymentAnnotations }}

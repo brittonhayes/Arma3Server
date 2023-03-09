@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "arma3.fullname" . }}-tunnel
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "arma3.labels" . | nindent 4 }}
   {{- with .Values.service.annotations }}

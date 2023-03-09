@@ -1,8 +1,8 @@
 # arma3
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
-A Helm chart for ARMA 3 on LinuxGSM
+A Helm chart for ARMA 3 on LinuxGSM.
 
 ## Maintainers
 
@@ -49,6 +49,7 @@ A Helm chart for ARMA 3 on LinuxGSM
 | persistence.data.annotations | object | `{}` |  |
 | persistence.data.enabled | bool | `false` |  |
 | persistence.data.size | string | `"40Gi"` |  |
+| persistence.data.storageClass | string | `"-"` |  |
 | persistence.headlessclient.accessMode | string | `"ReadWriteMany"` | Volume access mode, if you want to use more than one headless client, this must be ReadWriteMany |
 | persistence.headlessclient.annotations | object | `{}` |  |
 | persistence.headlessclient.enabled | bool | `true` | enable persistence for ARMA3 Headless Client data (all game assets except the config/profiles/main) |
