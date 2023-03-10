@@ -153,8 +153,25 @@ metadata:
   {{- end }}
 data:
   common.cfg: |-
+    ## SteamCMD Login
     steamuser={{ include "steamUser" . | quote }}
     steampass={{ include "steamPassword" . | quote }}
+
+    ## Mods
+    {{- if .Values.config.mods }}
+    mods={{ join ";" .Values.config.mods }}
+    {{- end }}
+
+    ## Server Mods
+    {{- if .Values.config.serverMods }}
+    servermods={{ join ";" .Values.config.serverMods }}
+    {{- end }}
+
+    ## Discord webhook alerts
+    {{- if .Values.config.alerts.discord }}
+    discordalert="on"
+    discordwebhook={{ .Values.config.alerts.discord }}
+    {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap

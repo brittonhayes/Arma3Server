@@ -71,6 +71,16 @@ config:
   # -- List of administrators
   admins: []
 
+  # -- List of mods
+  mods: []
+
+  # -- List of server mods
+  serverMods: []
+
+  # -- Webook alerts configurations
+  alerts:
+    discord: ""
+
   # -- Set the maximum number of player clients able to connect to the server
   maxPlayers: 20
 
@@ -105,6 +115,8 @@ persistence:
     # existingClaim:
 
     accessMode: ReadWriteOnce
+
+    # -- Size of the persistent volume claim (set this closer to 100Gi if you want to use quite a few mods)
     size: 40Gi
 
   profile:
