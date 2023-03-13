@@ -1,6 +1,6 @@
 # arma3
 
-![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart for ARMA 3 on LinuxGSM.
 
@@ -16,6 +16,8 @@ A Helm chart for ARMA 3 on LinuxGSM.
 |-----|------|---------|-------------|
 | affinity | object | `{}` |  |
 | config.admins | list | `[]` | List of administrators |
+| config.alerts | object | `{"discord":""}` | Webook alerts configurations |
+| config.alerts.discord | string | `""` | Discord webhook URL |
 | config.battleeye | int | `1` | 1=enabled, 0=disabled |
 | config.env | object | `{"ARMA_CDLC":"","ARMA_LIMITFPS":"60","MODS_PRESET":"","STEAM_BRANCH":""}` | Environment parameters for the game container |
 | config.env.ARMA_CDLC | string | `""` | Specify a creators DLC, e.g. 'vn' |
@@ -25,6 +27,8 @@ A Helm chart for ARMA 3 on LinuxGSM.
 | config.headlessClients | list | `[]` | Set the headlessClients and localClient, set to 127.0.0.1 when .Values.headlessclient.enabled |
 | config.hostname | string | `"arma3.example.com"` | External Hostname of server |
 | config.maxPlayers | int | `20` | Set the maximum number of player clients able to connect to the server |
+| config.mods | list | `[]` | List of mods |
+| config.serverMods | list | `[]` | List of server mods |
 | credentials | object | `{"adminPassword":"","serverPassword":"","steamPassword":"","steamUser":"","useExistingSecret":{"adminPasswordKey":"admin-password","enabled":false,"name":"","namespace":"","serverPasswordKey":"server-password","steamPasswordKey":"steam-password","steamUserKey":"steam-user"}}` | Specify credentials for the server |
 | credentials.useExistingSecret.adminPasswordKey | string | `"admin-password"` | The Server ADMIN Password |
 | credentials.useExistingSecret.enabled | bool | `false` | Use a dedicated, already existing secret for credentials, any key already specified under 'credentials.' directly will be ignored |
@@ -35,7 +39,7 @@ A Helm chart for ARMA 3 on LinuxGSM.
 | credentials.useExistingSecret.steamUserKey | string | `"steam-user"` | The Steam User to Login to the Steam API |
 | deploymentAnnotations."reloader.stakater.com/auto" | string | `"true"` | To automatically reload the container on configuration changes, use |
 | fullnameOverride | string | `""` |  |
-| headlessclient | object | `{"affinity":{},"antiAffinity":{"enabled":true},"enabled":true,"initResources":{},"name":"hc","nodeSelector":{},"replicas":null,"resources":{},"tolerations":[]}` | Headless clients only work when persistence.data.accessMode is set to 'ReadWriteMany' |
+| headlessclient | object | `{"affinity":{},"antiAffinity":{"enabled":true},"enabled":false,"initResources":{},"name":"hc","nodeSelector":{},"replicas":null,"resources":{},"tolerations":[]}` | Headless clients only work when persistence.data.accessMode is set to 'ReadWriteMany' |
 | headlessclient.antiAffinity.enabled | bool | `true` | Enable podAntiAffinity so that server and headless clients get scheduled on different nodes if possible |
 | headlessclient.initResources | object | `{}` | We usually recommend not to specify default resources and to leave this as a conscious choice for the user. |
 | headlessclient.replicas | string | `nil` | Launch the given number of headless clients in separate pods |
@@ -49,7 +53,7 @@ A Helm chart for ARMA 3 on LinuxGSM.
 | persistence.data.accessMode | string | `"ReadWriteOnce"` |  |
 | persistence.data.annotations | object | `{}` |  |
 | persistence.data.enabled | bool | `true` |  |
-| persistence.data.size | string | `"40Gi"` |  |
+| persistence.data.size | string | `"40Gi"` | Size of the persistent volume claim (set this closer to 100Gi if you want to use quite a few mods) |
 | persistence.data.storageClass | string | `"hostpath"` |  |
 | persistence.headlessclient.accessMode | string | `"ReadWriteMany"` | Volume access mode, if you want to use more than one headless client, this must be ReadWriteMany |
 | persistence.headlessclient.annotations | object | `{}` |  |

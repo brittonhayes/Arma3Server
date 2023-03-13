@@ -21,20 +21,20 @@ tasks:
   helm:
     desc: Execute helm template and documentation generation
     cmds:
-    - helm template arma3 {{ .ChartPath }} | kubeconform -summary
+    - helm template arma3 {{ .ChartPath }} --values values.yaml | kubeconform -summary
     - helm-docs -c {{ .ChartPath }}
 
-  install:
+  helm:install:
     desc: Install helm chart to cluster
     cmds:
-    - |
-      helm -n arma3 install arma3 {{ .ChartPath }} \
-        --set credentials.serverPassword=$SERVER_PASSWORD \
-        --set credentials.adminPassword=$ADMIN_PASSWORD \
-        --set credentials.steamUser=$STEAM_USER \
-        --set credentials.steamPassword=$STEAM_PASSWORD
+    - helm -n arma3 install arma3 {{ .ChartPath }} --values values.yaml
 
-  uninstall:
+  helm:upgrade:
+    desc: Release helm chart to cluster
+    cmds:
+    - helm upgrade -n arma3 --values values.yaml --install arma3 {{ .ChartPath }}
+
+  helm:uninstall:
     desc: Uninstall helm chart from cluster
     cmds:
     - helm -n arma3 uninstall arma3

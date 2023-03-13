@@ -79,6 +79,7 @@ config:
 
   # -- Webook alerts configurations
   alerts:
+    # -- Discord webhook URL
     discord: ""
 
   # -- Set the maximum number of player clients able to connect to the server
@@ -195,7 +196,7 @@ affinity: {}
 
 # -- Headless clients only work when persistence.data.accessMode is set to 'ReadWriteMany'
 headlessclient:
-  enabled: true
+  enabled: false
   name: hc
   # -- Launch the given number of headless clients in separate pods
   replicas: null
