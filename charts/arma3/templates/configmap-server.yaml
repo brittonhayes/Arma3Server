@@ -177,7 +177,7 @@ data:
     ## Discord webhook alerts
     {{- if .Values.config.alerts.discord }}
     discordalert="on"
-    discordwebhook={{ .Values.config.alerts.discord }}
+    discordwebhook={{ .Values.config.alerts.discord | quote }}
     {{- end }}
 ---
 apiVersion: v1

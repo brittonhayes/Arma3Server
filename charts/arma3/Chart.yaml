@@ -5,7 +5,7 @@ type: application
 maintainers:
 - name: Britton Hayes
   url: https://github.com/brittonhayes
-version: 0.1.6
+version: 0.1.7
 appVersion: "1.16.0"
 keywords:
 - arma3
