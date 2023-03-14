@@ -13,7 +13,7 @@ spec:
   strategy:
     type: Recreate
   {{- if .Values.replicas }}
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   {{- end }}
   selector:
     matchLabels:
@@ -124,15 +124,15 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: config
-              mountPath: /linuxgsm/lgsm/config-lgsm/arma3server/arma3server.server.cfg
+              mountPath: {{ .Values.config.serverConfigPath }} 
               subPath: arma3server.server.cfg
               readOnly: true
             - name: commonconfig
-              mountPath: /linuxgsm/lgsm/config-lgsm/arma3server/common.cfg
+              mountPath: {{ .Values.config.commonConfigPath }}
               subPath: common.cfg
               readOnly: true
             - name: networkconfig
-              mountPath: /linuxgsm/lgsm/config-lgsm/arma3server/arma3server.network.cfg
+              mountPath: {{ .Values.config.networkConfigPath }}
               subPath: arma3server.network.cfg
               readOnly: true
             - name: data

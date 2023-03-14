@@ -38,7 +38,7 @@ deploymentAnnotations:
 podAnnotations: {}
 
 podSecurityContext:
-  fsGroup: 433
+  # fsGroup: 433
 
 securityContext: {}
   # capabilities:
@@ -50,8 +50,7 @@ securityContext: {}
   # runAsGroup: 433
 
 service:
-  type: ClusterIP
-  port: 80
+  type: NodePort 
   annotations: {}
 
 resources: {}
@@ -68,9 +67,23 @@ config:
   # -- 1=enabled, 0=disabled
   battleeye: 1
 
+  # -- List of administrators
+  admins: []
+
+  # -- List of mods
+  mods: []
+
+  # -- List of server mods
+  serverMods: []
+
+  # -- Webook alerts configurations
+  alerts:
+    # -- Discord webhook URL
+    discord: ""
+
   # -- Set the maximum number of player clients able to connect to the server
   maxPlayers: 20
-
+  
   # -- Environment parameters for the game container
   env:
     # -- Select the steam branch, e.g. 'creatordlc'
@@ -81,6 +94,14 @@ config:
     MODS_PRESET: ""
     # -- Specify the FPS limit for the server
     ARMA_LIMITFPS: "60"
+
+  # -- Server config path
+  serverConfigPath: /linuxgsm/lgsm/config-lgsm/arma3server/arma3server.server.cfg
+  # -- Network config path
+  networkConfigPath: /linuxgsm/lgsm/config-lgsm/arma3server/arma3server.network.cfg
+  # -- Common config path
+  commonConfigPath: /linuxgsm/lgsm/config-lgsm/arma3server/common.cfg
+
 
 persistence:
   data:
@@ -102,6 +123,8 @@ persistence:
     # existingClaim:
 
     accessMode: ReadWriteOnce
+
+    # -- Size of the persistent volume claim (set this closer to 100Gi if you want to use quite a few mods)
     size: 40Gi
 
   profile:
@@ -180,7 +203,7 @@ affinity: {}
 
 # -- Headless clients only work when persistence.data.accessMode is set to 'ReadWriteMany'
 headlessclient:
-  enabled: true
+  enabled: false
   name: hc
   # -- Launch the given number of headless clients in separate pods
   replicas: null
