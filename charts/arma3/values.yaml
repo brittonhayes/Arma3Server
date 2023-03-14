@@ -38,7 +38,7 @@ deploymentAnnotations:
 podAnnotations: {}
 
 podSecurityContext:
-  fsGroup: 433
+  # fsGroup: 433
 
 securityContext: {}
   # capabilities:
@@ -50,8 +50,7 @@ securityContext: {}
   # runAsGroup: 433
 
 service:
-  type: ClusterIP
-  port: 80
+  type: NodePort 
   annotations: {}
 
 resources: {}
@@ -84,7 +83,7 @@ config:
 
   # -- Set the maximum number of player clients able to connect to the server
   maxPlayers: 20
-
+  
   # -- Environment parameters for the game container
   env:
     # -- Select the steam branch, e.g. 'creatordlc'
@@ -95,6 +94,14 @@ config:
     MODS_PRESET: ""
     # -- Specify the FPS limit for the server
     ARMA_LIMITFPS: "60"
+
+  # -- Server config path
+  serverConfigPath: /linuxgsm/lgsm/config-lgsm/arma3server/arma3server.server.cfg
+  # -- Network config path
+  networkConfigPath: /linuxgsm/lgsm/config-lgsm/arma3server/arma3server.network.cfg
+  # -- Common config path
+  commonConfigPath: /linuxgsm/lgsm/config-lgsm/arma3server/common.cfg
+
 
 persistence:
   data:

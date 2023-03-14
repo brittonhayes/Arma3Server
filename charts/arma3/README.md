@@ -1,6 +1,6 @@
 # arma3
 
-![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.6](https://img.shields.io/badge/Version-0.1.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart for ARMA 3 on LinuxGSM.
 
@@ -19,6 +19,7 @@ A Helm chart for ARMA 3 on LinuxGSM.
 | config.alerts | object | `{"discord":""}` | Webook alerts configurations |
 | config.alerts.discord | string | `""` | Discord webhook URL |
 | config.battleeye | int | `1` | 1=enabled, 0=disabled |
+| config.commonConfigPath | string | `"/linuxgsm/lgsm/config-lgsm/arma3server/common.cfg"` | Common config path |
 | config.env | object | `{"ARMA_CDLC":"","ARMA_LIMITFPS":"60","MODS_PRESET":"","STEAM_BRANCH":""}` | Environment parameters for the game container |
 | config.env.ARMA_CDLC | string | `""` | Specify a creators DLC, e.g. 'vn' |
 | config.env.ARMA_LIMITFPS | string | `"60"` | Specify the FPS limit for the server |
@@ -28,6 +29,8 @@ A Helm chart for ARMA 3 on LinuxGSM.
 | config.hostname | string | `"arma3.example.com"` | External Hostname of server |
 | config.maxPlayers | int | `20` | Set the maximum number of player clients able to connect to the server |
 | config.mods | list | `[]` | List of mods |
+| config.networkConfigPath | string | `"/linuxgsm/lgsm/config-lgsm/arma3server/arma3server.network.cfg"` | Network config path |
+| config.serverConfigPath | string | `"/linuxgsm/lgsm/config-lgsm/arma3server/arma3server.server.cfg"` | Server config path |
 | config.serverMods | list | `[]` | List of server mods |
 | credentials | object | `{"adminPassword":"","serverPassword":"","steamPassword":"","steamUser":"","useExistingSecret":{"adminPasswordKey":"admin-password","enabled":false,"name":"","namespace":"","serverPasswordKey":"server-password","steamPasswordKey":"steam-password","steamUserKey":"steam-user"}}` | Specify credentials for the server |
 | credentials.useExistingSecret.adminPasswordKey | string | `"admin-password"` | The Server ADMIN Password |
@@ -67,7 +70,7 @@ A Helm chart for ARMA 3 on LinuxGSM.
 | persistence.profile.size | string | `"2Gi"` |  |
 | persistence.profile.storageClass | string | `"hostpath"` |  |
 | podAnnotations | object | `{}` |  |
-| podSecurityContext.fsGroup | int | `433` |  |
+| podSecurityContext | string | `nil` |  |
 | replicas | int | `1` | Only one replica is supported at this time |
 | resources | object | `{}` |  |
 | rsync.enabled | bool | `false` | Use rsync to synchronize the game data from the server to the headless clients on startup |
@@ -81,8 +84,7 @@ A Helm chart for ARMA 3 on LinuxGSM.
 | rsync.securityContext.runAsUser | int | `0` |  |
 | securityContext | object | `{}` |  |
 | service.annotations | object | `{}` |  |
-| service.port | int | `80` |  |
-| service.type | string | `"ClusterIP"` |  |
+| service.type | string | `"NodePort"` |  |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` | If not set and create is true, a name is generated using the fullname template |

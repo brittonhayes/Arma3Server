@@ -21,7 +21,7 @@ tasks:
   helm:
     desc: Execute helm template and documentation generation
     cmds:
-    - helm template arma3 {{ .ChartPath }} --values values.yaml | kubeconform -summary
+    - helm template arma3 {{ .ChartPath }} | kubeconform -summary
     - helm-docs -c {{ .ChartPath }}
 
   helm:install:

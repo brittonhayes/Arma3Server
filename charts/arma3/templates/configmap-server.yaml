@@ -138,7 +138,10 @@ data:
     localClient[]={ {{join "," .Values.config.headlessClients}} };
     {{- end }}
 
-
+    class Missions
+    {
+      class Apex{};
+    };
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -156,6 +159,10 @@ data:
     ## SteamCMD Login
     steamuser={{ include "steamUser" . | quote }}
     steampass={{ include "steamPassword" . | quote }}
+
+    ## Variables
+    servercfgfullpath={{ .Values.config.serverConfigPath | quote }}
+    networkcfgfullpath={{ .Values.config.networkConfigPath | quote }}
 
     ## Mods
     {{- if .Values.config.mods }}
